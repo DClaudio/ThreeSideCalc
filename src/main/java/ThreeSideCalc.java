@@ -12,11 +12,11 @@ public class ThreeSideCalc {
         this.tennantPaymentsMapping = tennantPaymentsMapping;
     }
 
-    public Map<Tennant, Integer> computeResult(){
-        Map<Tennant, Integer> contributions = new HashMap<Tennant, Integer>();
-        contributions.put(Tennant.CLAUDIO,0);
-        contributions.put(Tennant.BOGDAN,0);
-        contributions.put(Tennant.DAN,0);
-        return contributions;
+    public Integer computeContribution(){
+        Integer total = 0;
+        for(Integer payment: tennantPaymentsMapping.values()){
+            total+=payment;
+        }
+        return total/tennantPaymentsMapping.size();
     }
 }
