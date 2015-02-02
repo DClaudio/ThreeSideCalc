@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,4 +29,12 @@ public class ThreeSideCalc {
         }
         return remainingPayments;
     }
+
+    public List<Payment> computePaymentsList(){
+        Map<Tennant, Integer> remainingPayments = computeRemainingPayments();
+
+        return null;
+    }
+
+
 }
