@@ -32,7 +32,7 @@ public class PaymentsManagementCalculatorTest {
     }
 
     @Test
-    public void computeForInequalPayments(){
+    public void computeForNonEqualPayments(){
         Map<Tenant,Integer> payments = setupPaymentMapFor3Tenants(30, 20, 40);
         Map<Tenant,Integer> expectedPaymentRemaining = setupPaymentMapFor3Tenants(0, 10, -10);
         List<Payment> expectedPayments = new ArrayList<Payment>();
