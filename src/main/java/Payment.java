@@ -3,37 +3,38 @@
  */
 public class Payment {
 
-    private Tenant from;
-    private Tenant to;
+    private Tenant sender;
+    private Tenant receiver;
     private Integer amount;
 
-    public Payment(Tenant from, Tenant to, Integer amount) {
-        this.from = from;
-        this.to = to;
-        this.amount = amount;
+    public Payment() {
+        super();
     }
 
-    public Tenant getFrom() {
-        return from;
+    public Tenant getSender() {
+        return sender;
     }
 
-    public void setFrom(Tenant from) {
-        this.from = from;
-    }
-
-    public Tenant getTo() {
-        return to;
-    }
-
-    public void setTo(Tenant to) {
-        this.to = to;
+    public Tenant getReceiver() {
+        return receiver;
     }
 
     public Integer getAmount() {
         return amount;
     }
 
-    public void setAmount(Integer amount) {
+    public Payment addPaymentSender(Tenant sender){
+        this.sender = sender;
+        return this;
+    }
+
+    public Payment addPaymentReceiver(Tenant receiver){
+        this.receiver = receiver;
+        return this;
+    }
+
+    public Payment addAmount(Integer amount){
         this.amount = amount;
+        return this;
     }
 }
