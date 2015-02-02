@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,9 +32,15 @@ public class ThreeSideCalc {
     }
 
     public List<Payment> computePaymentsList(){
+        List<Payment> payments = new ArrayList<Payment>();
         Map<Tennant, Integer> remainingPayments = computeRemainingPayments();
 
-        return null;
+        for(Map.Entry<Tennant, Integer> remainingPayment: tennantPaymentsMapping.entrySet()){
+            if(remainingPayment.getValue() != 0){
+
+            }
+        }
+        return payments;
     }
 
 
