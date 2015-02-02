@@ -3,29 +3,29 @@
  */
 public class Payment {
 
-    private Tennant from;
-    private Tennant to;
+    private Tenant from;
+    private Tenant to;
     private Integer amount;
 
-    public Payment(Tennant from, Tennant to, Integer amount) {
+    public Payment(Tenant from, Tenant to, Integer amount) {
         this.from = from;
         this.to = to;
         this.amount = amount;
     }
 
-    public Tennant getFrom() {
+    public Tenant getFrom() {
         return from;
     }
 
-    public void setFrom(Tennant from) {
+    public void setFrom(Tenant from) {
         this.from = from;
     }
 
-    public Tennant getTo() {
+    public Tenant getTo() {
         return to;
     }
 
-    public void setTo(Tennant to) {
+    public void setTo(Tenant to) {
         this.to = to;
     }
 

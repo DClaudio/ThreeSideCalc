@@ -13,18 +13,18 @@ import static org.junit.Assert.assertEquals;
 
 public class PaymentsManagementCalculatorTest {
 
-    private Map<Tennant,Integer> setupMap(int bogdan, int claudio, int dan){
-        Map<Tennant,Integer> mapping = new HashMap<Tennant,Integer>();
-        mapping.put(Tennant.BOGDAN, bogdan);
-        mapping.put(Tennant.CLAUDIO, claudio);
-        mapping.put(Tennant.DAN, dan);
+    private Map<Tenant,Integer> setupMap(int bogdan, int claudio, int dan){
+        Map<Tenant,Integer> mapping = new HashMap<Tenant,Integer>();
+        mapping.put(Tenant.BOGDAN, bogdan);
+        mapping.put(Tenant.CLAUDIO, claudio);
+        mapping.put(Tenant.DAN, dan);
         return mapping;
     }
 
     @Test
     public void computeForEqualPayments(){
-        Map<Tennant,Integer> payments = setupMap(20, 20, 20);
-        Map<Tennant,Integer> expectedPaymentRemaining = setupMap(0, 0, 0);
+        Map<Tenant,Integer> payments = setupMap(20, 20, 20);
+        Map<Tenant,Integer> expectedPaymentRemaining = setupMap(0, 0, 0);
         List<Payment> expectedPayments = new ArrayList<Payment>();
         PaymentsManagementCalculator paymentsManagementCalculator = new PaymentsManagementCalculator(payments);
         assertEquals("",expectedPaymentRemaining, paymentsManagementCalculator.computeRemainingPayments());
@@ -33,10 +33,10 @@ public class PaymentsManagementCalculatorTest {
 
     @Test
     public void computeForInequalPayments(){
-        Map<Tennant,Integer> payments = setupMap(30, 20, 40);
-        Map<Tennant,Integer> expectedPaymentRemaining = setupMap(0, 10, -10);
+        Map<Tenant,Integer> payments = setupMap(30, 20, 40);
+        Map<Tenant,Integer> expectedPaymentRemaining = setupMap(0, 10, -10);
         List<Payment> expectedPayments = new ArrayList<Payment>();
-        expectedPayments.add(new Payment(Tennant.DAN,Tennant.CLAUDIO, 10));
+        expectedPayments.add(new Payment(Tenant.DAN, Tenant.CLAUDIO, 10));
         PaymentsManagementCalculator paymentsManagementCalculator = new PaymentsManagementCalculator(payments);
         assertEquals("",expectedPaymentRemaining, paymentsManagementCalculator.computeRemainingPayments());
     }

@@ -8,9 +8,9 @@ import java.util.Map;
  */
 public class PaymentsManagementCalculator {
 
-    private Map<Tennant, Integer> tennantPaymentsMapping;
+    private Map<Tenant, Integer> tennantPaymentsMapping;
 
-    public PaymentsManagementCalculator(Map<Tennant, Integer> tennantPaymentsMapping) {
+    public PaymentsManagementCalculator(Map<Tenant, Integer> tennantPaymentsMapping) {
         this.tennantPaymentsMapping = tennantPaymentsMapping;
     }
 
@@ -22,9 +22,9 @@ public class PaymentsManagementCalculator {
         return total/tennantPaymentsMapping.size();
     }
 
-    public Map<Tennant, Integer> computeRemainingPayments(){
-        Map<Tennant, Integer> remainingPayments = new HashMap<Tennant, Integer>();
-        for(Map.Entry<Tennant, Integer> payment: tennantPaymentsMapping.entrySet()){
+    public Map<Tenant, Integer> computeRemainingPayments(){
+        Map<Tenant, Integer> remainingPayments = new HashMap<Tenant, Integer>();
+        for(Map.Entry<Tenant, Integer> payment: tennantPaymentsMapping.entrySet()){
             remainingPayments.put(payment.getKey(), computeContribution() - payment.getValue());
 
         }
@@ -33,9 +33,9 @@ public class PaymentsManagementCalculator {
 
     public List<Payment> computePaymentsList(){
         List<Payment> payments = new ArrayList<Payment>();
-        Map<Tennant, Integer> remainingPayments = computeRemainingPayments();
+        Map<Tenant, Integer> remainingPayments = computeRemainingPayments();
 
-        for(Map.Entry<Tennant, Integer> remainingPayment: tennantPaymentsMapping.entrySet()){
+        for(Map.Entry<Tenant, Integer> remainingPayment: tennantPaymentsMapping.entrySet()){
             if(remainingPayment.getValue() != 0){
 
             }
