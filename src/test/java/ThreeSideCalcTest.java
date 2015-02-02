@@ -22,18 +22,18 @@ public class ThreeSideCalcTest {
     @Test
     public void computeForEqualPayments(){
         Map<Tennant,Integer> payments = setupMap(20, 20, 20);
-        Integer expectedContribution = 20;
+        Map<Tennant,Integer> expectedPaymentRemaining = setupMap(0, 0, 0);
         ThreeSideCalc threeSideCalc = new ThreeSideCalc(payments);
-        assertEquals("",expectedContribution,threeSideCalc.computeContribution());
+        assertEquals("",expectedPaymentRemaining, threeSideCalc.computeRemainingPayments());
 
     }
 
     @Test
     public void computeForInequalPayments(){
         Map<Tennant,Integer> payments = setupMap(30, 20, 40);
-        Integer expectedContribution = 30;
+        Map<Tennant,Integer> expectedPaymentRemaining = setupMap(0, 10, -10);
         ThreeSideCalc threeSideCalc = new ThreeSideCalc(payments);
-        assertEquals("",expectedContribution,threeSideCalc.computeContribution());
+        assertEquals("",expectedPaymentRemaining, threeSideCalc.computeRemainingPayments());
     }
 
 }
