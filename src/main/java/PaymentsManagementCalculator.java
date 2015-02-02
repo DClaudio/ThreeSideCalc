@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by claudio.david on 02/02/2015.
@@ -31,8 +28,8 @@ public class PaymentsManagementCalculator {
         return remainingPayments;
     }
 
-    public List<Payment> computePaymentsList(){
-        List<Payment> payments = new ArrayList<Payment>();
+    public Set<Payment> computePaymentsList(){
+        Set<Payment> payments = new HashSet<Payment>();
         return payments;
     }
 

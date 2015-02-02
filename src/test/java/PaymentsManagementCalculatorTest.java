@@ -4,10 +4,7 @@
 
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -32,7 +29,7 @@ public class PaymentsManagementCalculatorTest {
     public void computeForEqualPayments(){
         Map<Tenant,Integer> payments = setupPaymentMapFor3Tenants(20, 20, 20);
         Map<Tenant,Integer> expectedPaymentRemaining = setupPaymentMapFor3Tenants(0, 0, 0);
-        List<Payment> expectedPayments = new ArrayList<Payment>();
+        Set<Payment> expectedPayments = new HashSet<Payment>();
         PaymentsManagementCalculator paymentsManagementCalculator = new PaymentsManagementCalculator(payments);
         assertEquals("",expectedPaymentRemaining, paymentsManagementCalculator.computeRemainingPayments());
         assertEquals("", expectedPayments, paymentsManagementCalculator.computePaymentsList());
@@ -42,7 +39,7 @@ public class PaymentsManagementCalculatorTest {
     public void computeForNonEqualPayments(){
         Map<Tenant,Integer> payments = setupPaymentMapFor3Tenants(30, 20, 40);
         Map<Tenant,Integer> expectedPaymentRemaining = setupPaymentMapFor3Tenants(0, 10, -10);
-        List<Payment> expectedPayments = new ArrayList<Payment>();
+        Set<Payment> expectedPayments = new HashSet<Payment>();
         expectedPayments.add(new Payment().addPaymentSender(Tenant.CLAUDIO).addPaymentReceiver(Tenant.DAN).addAmount(10));
         PaymentsManagementCalculator paymentsManagementCalculator = new PaymentsManagementCalculator(payments);
         assertEquals("",expectedPaymentRemaining, paymentsManagementCalculator.computeRemainingPayments());
@@ -52,10 +49,11 @@ public class PaymentsManagementCalculatorTest {
     public void computeFor2NonEqualPayment(){
         Map<Tenant,Integer> payments = setupPaymentMapFor2Tenants(30, 20);
         Map<Tenant,Integer> expectedPaymentRemaining = setupPaymentMapFor2Tenants(-5, 5);
-        List<Payment> expectedPayments = new ArrayList<Payment>();
+        Set<Payment> expectedPayments = new HashSet<Payment>();
         expectedPayments.add(new Payment().addPaymentSender(Tenant.CLAUDIO).addPaymentReceiver(Tenant.BOGDAN).addAmount(5));
         PaymentsManagementCalculator paymentsManagementCalculator = new PaymentsManagementCalculator(payments);
         assertEquals("",expectedPaymentRemaining, paymentsManagementCalculator.computeRemainingPayments());
+        assertEquals("", expectedPayments, paymentsManagementCalculator.computePaymentsList());
 
     }
 
