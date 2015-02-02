@@ -11,7 +11,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
-public class ThreeSideCalcTest {
+public class PaymentsManagementCalculatorTest {
 
     private Map<Tennant,Integer> setupMap(int bogdan, int claudio, int dan){
         Map<Tennant,Integer> mapping = new HashMap<Tennant,Integer>();
@@ -26,9 +26,9 @@ public class ThreeSideCalcTest {
         Map<Tennant,Integer> payments = setupMap(20, 20, 20);
         Map<Tennant,Integer> expectedPaymentRemaining = setupMap(0, 0, 0);
         List<Payment> expectedPayments = new ArrayList<Payment>();
-        ThreeSideCalc threeSideCalc = new ThreeSideCalc(payments);
-        assertEquals("",expectedPaymentRemaining, threeSideCalc.computeRemainingPayments());
-        assertEquals("", expectedPayments, threeSideCalc.computePaymentsList());
+        PaymentsManagementCalculator paymentsManagementCalculator = new PaymentsManagementCalculator(payments);
+        assertEquals("",expectedPaymentRemaining, paymentsManagementCalculator.computeRemainingPayments());
+        assertEquals("", expectedPayments, paymentsManagementCalculator.computePaymentsList());
     }
 
     @Test
@@ -37,8 +37,8 @@ public class ThreeSideCalcTest {
         Map<Tennant,Integer> expectedPaymentRemaining = setupMap(0, 10, -10);
         List<Payment> expectedPayments = new ArrayList<Payment>();
         expectedPayments.add(new Payment(Tennant.DAN,Tennant.CLAUDIO, 10));
-        ThreeSideCalc threeSideCalc = new ThreeSideCalc(payments);
-        assertEquals("",expectedPaymentRemaining, threeSideCalc.computeRemainingPayments());
+        PaymentsManagementCalculator paymentsManagementCalculator = new PaymentsManagementCalculator(payments);
+        assertEquals("",expectedPaymentRemaining, paymentsManagementCalculator.computeRemainingPayments());
     }
 
 }

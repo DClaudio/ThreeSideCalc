@@ -6,11 +6,11 @@ import java.util.Map;
 /**
  * Created by claudio.david on 02/02/2015.
  */
-public class ThreeSideCalc {
+public class PaymentsManagementCalculator {
 
     private Map<Tennant, Integer> tennantPaymentsMapping;
 
-    public ThreeSideCalc(Map<Tennant, Integer> tennantPaymentsMapping) {
+    public PaymentsManagementCalculator(Map<Tennant, Integer> tennantPaymentsMapping) {
         this.tennantPaymentsMapping = tennantPaymentsMapping;
     }
 
