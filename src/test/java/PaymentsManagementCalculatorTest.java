@@ -13,11 +13,11 @@ import static org.junit.Assert.assertEquals;
 
 public class PaymentsManagementCalculatorTest {
 
-    private Map<Tenant,Integer> setupMap(int bogdan, int claudio, int dan){
+    private Map<Tenant,Integer> setupMap(int paidByBogdan, int paidByClaudio, int paidByDan){
         Map<Tenant,Integer> mapping = new HashMap<Tenant,Integer>();
-        mapping.put(Tenant.BOGDAN, bogdan);
-        mapping.put(Tenant.CLAUDIO, claudio);
-        mapping.put(Tenant.DAN, dan);
+        mapping.put(Tenant.BOGDAN, paidByBogdan);
+        mapping.put(Tenant.CLAUDIO, paidByClaudio);
+        mapping.put(Tenant.DAN, paidByDan);
         return mapping;
     }
 
