@@ -33,13 +33,6 @@ public class PaymentsManagementCalculator {
 
     public List<Payment> computePaymentsList(){
         List<Payment> payments = new ArrayList<Payment>();
-        Map<Tenant, Integer> remainingPayments = computeRemainingPayments();
-
-        for(Map.Entry<Tenant, Integer> remainingPayment: tennantPaymentsMapping.entrySet()){
-            if(remainingPayment.getValue() != 0){
-
-            }
-        }
         return payments;
     }
 

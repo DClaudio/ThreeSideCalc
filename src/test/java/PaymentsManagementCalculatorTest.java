@@ -21,6 +21,13 @@ public class PaymentsManagementCalculatorTest {
         return mapping;
     }
 
+    private Map<Tenant,Integer> setupPaymentMapFor2Tenants(int paidByBogdan, int paidByClaudio){
+        Map<Tenant,Integer> mapping = new HashMap<Tenant,Integer>();
+        mapping.put(Tenant.BOGDAN, paidByBogdan);
+        mapping.put(Tenant.CLAUDIO, paidByClaudio);
+        return mapping;
+    }
+
     @Test
     public void computeForEqualPayments(){
         Map<Tenant,Integer> payments = setupPaymentMapFor3Tenants(20, 20, 20);
@@ -39,6 +46,17 @@ public class PaymentsManagementCalculatorTest {
         expectedPayments.add(new Payment().addPaymentSender(Tenant.CLAUDIO).addPaymentReceiver(Tenant.DAN).addAmount(10));
         PaymentsManagementCalculator paymentsManagementCalculator = new PaymentsManagementCalculator(payments);
         assertEquals("",expectedPaymentRemaining, paymentsManagementCalculator.computeRemainingPayments());
+    }
+
+    @Test
+    public void computeFor2NonEqualPayment(){
+        Map<Tenant,Integer> payments = setupPaymentMapFor2Tenants(30, 20);
+        Map<Tenant,Integer> expectedPaymentRemaining = setupPaymentMapFor2Tenants(-5, 5);
+        List<Payment> expectedPayments = new ArrayList<Payment>();
+        expectedPayments.add(new Payment().addPaymentSender(Tenant.CLAUDIO).addPaymentReceiver(Tenant.BOGDAN).addAmount(5));
+        PaymentsManagementCalculator paymentsManagementCalculator = new PaymentsManagementCalculator(payments);
+        assertEquals("",expectedPaymentRemaining, paymentsManagementCalculator.computeRemainingPayments());
+
     }
 
 }
