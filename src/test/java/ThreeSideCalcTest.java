@@ -20,27 +20,20 @@ public class ThreeSideCalcTest {
     }
 
     @Test
-    public void computeForZeroPayments(){
-
-        Map<Tennant,Integer> payments = setupMap(0, 0, 0);
-        Integer expectedContribution =0;
-
+    public void computeForEqualPayments(){
+        Map<Tennant,Integer> payments = setupMap(20, 20, 20);
+        Integer expectedContribution = 20;
         ThreeSideCalc threeSideCalc = new ThreeSideCalc(payments);
-
         assertEquals("",expectedContribution,threeSideCalc.computeContribution());
 
     }
 
     @Test
-    public void computeForEqualPayments(){
-
-        Map<Tennant,Integer> payments = setupMap(20, 20, 20);
-        Integer expectedContribution = 20;
-
+    public void computeForInequalPayments(){
+        Map<Tennant,Integer> payments = setupMap(30, 20, 40);
+        Integer expectedContribution = 30;
         ThreeSideCalc threeSideCalc = new ThreeSideCalc(payments);
-
         assertEquals("",expectedContribution,threeSideCalc.computeContribution());
-
     }
 
 }
