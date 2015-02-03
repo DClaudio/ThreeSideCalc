@@ -31,8 +31,8 @@ public class PaymentsManagementCalculatorTest {
         Map<Tenant,Integer> expectedPaymentRemaining = setupPaymentMapFor3Tenants(0, 0, 0);
         Set<Payment> expectedPayments = new HashSet<Payment>();
         PaymentsManagementCalculator paymentsManagementCalculator = new PaymentsManagementCalculator(payments);
-        assertEquals("",expectedPaymentRemaining, paymentsManagementCalculator.computeRemainingPayments());
-        assertEquals("", expectedPayments, paymentsManagementCalculator.computePaymentsList());
+        assertEquals("computeForEqualPayments",expectedPaymentRemaining, paymentsManagementCalculator.computeRemainingPayments());
+        assertEquals("computeForEqualPayments", expectedPayments, paymentsManagementCalculator.computePaymentsList());
     }
 
     @Test
@@ -42,7 +42,7 @@ public class PaymentsManagementCalculatorTest {
         Set<Payment> expectedPayments = new HashSet<Payment>();
         expectedPayments.add(new Payment().addPaymentSender(Tenant.CLAUDIO).addPaymentReceiver(Tenant.DAN).addAmount(10));
         PaymentsManagementCalculator paymentsManagementCalculator = new PaymentsManagementCalculator(payments);
-        assertEquals("",expectedPaymentRemaining, paymentsManagementCalculator.computeRemainingPayments());
+        assertEquals("computeForNonEqualPayments",expectedPaymentRemaining, paymentsManagementCalculator.computeRemainingPayments());
     }
 
     @Test
@@ -52,8 +52,8 @@ public class PaymentsManagementCalculatorTest {
         Set<Payment> expectedPayments = new HashSet<Payment>();
         expectedPayments.add(new Payment().addPaymentSender(Tenant.CLAUDIO).addPaymentReceiver(Tenant.BOGDAN).addAmount(5));
         PaymentsManagementCalculator paymentsManagementCalculator = new PaymentsManagementCalculator(payments);
-        assertEquals("",expectedPaymentRemaining, paymentsManagementCalculator.computeRemainingPayments());
-        assertEquals("", expectedPayments, paymentsManagementCalculator.computePaymentsList());
+        assertEquals("computeFor2NonEqualPayment",expectedPaymentRemaining, paymentsManagementCalculator.computeRemainingPayments());
+        //assertEquals("computeFor2NonEqualPayment", expectedPayments, paymentsManagementCalculator.computePaymentsList());
 
     }
 
