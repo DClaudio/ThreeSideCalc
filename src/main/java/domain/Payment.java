@@ -1,3 +1,5 @@
+package domain;
+
 /**
  * Created by claudio.david on 02/02/2015.
  */
@@ -62,7 +64,7 @@ public class Payment {
 
     @Override
     public String toString() {
-        return "Payment{" +
+        return "domain.Payment{" +
                 "sender=" + sender +
                 ", receiver=" + receiver +
                 ", amount=" + amount +

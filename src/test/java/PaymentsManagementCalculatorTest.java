@@ -2,6 +2,9 @@
  * Created by claudio.david on 02/02/2015.
  */
 
+import domain.Payment;
+import domain.Tenant;
+import logic.PaymentsManagementCalculator;
 import org.junit.Test;
 
 import java.util.*;

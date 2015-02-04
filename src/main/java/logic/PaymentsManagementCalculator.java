@@ -1,3 +1,8 @@
+package logic;
+
+import domain.Payment;
+import domain.Tenant;
+
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -9,6 +14,9 @@ public class PaymentsManagementCalculator {
 
     private Map<Tenant, Double> tennantPaymentsMapping;
     private Double contributionNeeded;
+
+    public Map<Tenant, Double> getTennantPaymentsMapping() {return tennantPaymentsMapping; }
+    public Double getContributionNeeded() {return contributionNeeded;}
 
     private Map<Tenant, Double> paymentsToSend = new ConcurrentHashMap<Tenant, Double>();
     private Map<Tenant, Double> paymentsToReceive = new ConcurrentHashMap<Tenant, Double>();
