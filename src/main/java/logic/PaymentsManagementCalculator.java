@@ -36,7 +36,7 @@ public class PaymentsManagementCalculator {
         for(Double payment: tenantPaymentsMapping.values()){
             total+=payment;
         }
-        return (total == 0) ? new Double(0) : total/ tenantPaymentsMapping.size();
+        return total.equals(0) ? new Double(0) : total/ tenantPaymentsMapping.size();
     }
 
     private void computeRemainingPayments(){
