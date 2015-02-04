@@ -5,7 +5,7 @@ public class Payment {
 
     private Tenant sender;
     private Tenant receiver;
-    private Integer amount;
+    private Double amount;
 
     public Payment() {
         super();
@@ -19,7 +19,7 @@ public class Payment {
         return receiver;
     }
 
-    public Integer getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
@@ -33,7 +33,7 @@ public class Payment {
         return this;
     }
 
-    public Payment addAmount(Integer amount){
+    public Payment addAmount(Double amount){
         this.amount = amount;
         return this;
     }

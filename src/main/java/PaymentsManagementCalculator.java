@@ -6,33 +6,33 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class PaymentsManagementCalculator {
 
-    private Map<Tenant, Integer> tennantPaymentsMapping;
-    private Integer contributionNeeded;
+    private Map<Tenant, Double> tennantPaymentsMapping;
+    private Double contributionNeeded;
 
-    private Map<Tenant, Integer> paymentsToSend = new ConcurrentHashMap<Tenant, Integer>();
-    private Map<Tenant, Integer> paymentsToReceive = new ConcurrentHashMap<Tenant, Integer>();
+    private Map<Tenant, Double> paymentsToSend = new ConcurrentHashMap<Tenant, Double>();
+    private Map<Tenant, Double> paymentsToReceive = new ConcurrentHashMap<Tenant, Double>();
 
-    public PaymentsManagementCalculator(Map<Tenant, Integer> tennantPaymentsMapping) {
+    public PaymentsManagementCalculator(Map<Tenant, Double> tennantPaymentsMapping) {
         this.tennantPaymentsMapping = tennantPaymentsMapping;
         if(tennantPaymentsMapping != null && !tennantPaymentsMapping.isEmpty()){
             contributionNeeded = computeContribution();
             computeRemainingPayments();
         }else{
-            contributionNeeded = new Integer(0);
+            contributionNeeded = new Double(0);
         }
     }
 
-    private Integer computeContribution(){
-        Integer total = 0;
-        for(Integer payment: tennantPaymentsMapping.values()){
+    private Double computeContribution(){
+        Double total = new Double(0);
+        for(Double payment: tennantPaymentsMapping.values()){
             total+=payment;
         }
-        return (total == 0) ? new Integer(0) : total/tennantPaymentsMapping.size();
+        return (total == 0) ? new Double(0) : total/tennantPaymentsMapping.size();
     }
 
     private void computeRemainingPayments(){
-        for(Map.Entry<Tenant, Integer> payment: tennantPaymentsMapping.entrySet()){
-            Integer remainingPayment = contributionNeeded - payment.getValue();
+        for(Map.Entry<Tenant, Double> payment: tennantPaymentsMapping.entrySet()){
+            Double remainingPayment = contributionNeeded - payment.getValue();
             if(remainingPayment > 0){
                 paymentsToSend.put(payment.getKey(), remainingPayment);
             }
@@ -47,14 +47,14 @@ public class PaymentsManagementCalculator {
         if(contributionNeeded == 0 || (paymentsToReceive.isEmpty() && paymentsToSend.isEmpty() )){
             return payments;
         }
-        for(Map.Entry<Tenant, Integer> paymentToSend : paymentsToSend.entrySet()){
-            for(Map.Entry<Tenant, Integer> paymentToReceive : paymentsToReceive.entrySet()){
+        for(Map.Entry<Tenant, Double> paymentToSend : paymentsToSend.entrySet()){
+            for(Map.Entry<Tenant, Double> paymentToReceive : paymentsToReceive.entrySet()){
                 Payment payment = new Payment().addPaymentSender(paymentToSend.getKey())
                                                 .addPaymentReceiver(paymentToReceive.getKey());
                 paymentsToSend.remove(paymentToSend.getKey());
                 paymentsToReceive.remove(paymentToReceive.getKey());
 
-                Integer remainingBalance = paymentToSend.getValue() - paymentToReceive.getValue();
+                Double remainingBalance = paymentToSend.getValue() - paymentToReceive.getValue();
                 if(remainingBalance >= 0){
                     payment.addAmount(paymentToReceive.getValue());
                     if(remainingBalance != 0)
