@@ -6,9 +6,15 @@ import java.util.*;
 public class PaymentsManagementCalculator {
 
     private Map<Tenant, Integer> tennantPaymentsMapping;
+    private Integer contributionNeeded;
 
     public PaymentsManagementCalculator(Map<Tenant, Integer> tennantPaymentsMapping) {
         this.tennantPaymentsMapping = tennantPaymentsMapping;
+        if(tennantPaymentsMapping != null && !tennantPaymentsMapping.isEmpty()){
+            contributionNeeded = computeContribution();
+        }else{
+            contributionNeeded = new Integer(0);
+        }
     }
 
     private Integer computeContribution(){
@@ -16,15 +22,14 @@ public class PaymentsManagementCalculator {
         for(Integer payment: tennantPaymentsMapping.values()){
             total+=payment;
         }
-        return total/tennantPaymentsMapping.size();
+        return (total == 0) ? new Integer(0) : total/tennantPaymentsMapping.size();
     }
 
     public Map<Tenant, Integer> computeRemainingPayments(){
         Map<Tenant, Integer> remainingPayments = new HashMap<Tenant, Integer>();
         for(Map.Entry<Tenant, Integer> payment: tennantPaymentsMapping.entrySet()){
-            remainingPayments.put(payment.getKey(), computeContribution() - payment.getValue());
+            remainingPayments.put(payment.getKey(), contributionNeeded - payment.getValue());
         }
-
         return remainingPayments;
     }
 

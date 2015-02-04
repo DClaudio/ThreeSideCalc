@@ -59,4 +59,13 @@ public class Payment {
         result = 31 * result + (amount != null ? amount.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Payment{" +
+                "sender=" + sender +
+                ", receiver=" + receiver +
+                ", amount=" + amount +
+                '}';
+    }
 }

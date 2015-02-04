@@ -58,7 +58,7 @@ public class PaymentsManagementCalculatorTest {
     }
 
     @Test
-    public void computeFor3NonEqualPaymentTest(){
+         public void computeFor3NonEqualPaymentTest(){
         Map<Tenant,Integer> payments = setupPaymentMapFor3Tenants(20, 20, 50);
         Map<Tenant,Integer> expectedPaymentRemaining = setupPaymentMapFor3Tenants(10, 10, -20);
         Set<Payment> expectedPayments = new HashSet<Payment>();
@@ -67,7 +67,18 @@ public class PaymentsManagementCalculatorTest {
         PaymentsManagementCalculator paymentsManagementCalculator = new PaymentsManagementCalculator(payments);
         assertEquals("Test non equal payments for 3 tenants - computeRemainingPayments",expectedPaymentRemaining, paymentsManagementCalculator.computeRemainingPayments());
         assertEquals("Test non equal payments for 3 tenants - computePaymentsList", expectedPayments, paymentsManagementCalculator.computePaymentsList());
+    }
 
+    @Test
+    public void computeFor3NonEqualPaymentTest2(){
+        Map<Tenant,Integer> payments = setupPaymentMapFor3Tenants(40, 10, 40);
+        Map<Tenant,Integer> expectedPaymentRemaining = setupPaymentMapFor3Tenants(-10, 20, -10);
+        Set<Payment> expectedPayments = new HashSet<Payment>();
+        expectedPayments.add(new Payment().addPaymentSender(Tenant.CLAUDIO).addPaymentReceiver(Tenant.DAN).addAmount(10));
+        expectedPayments.add(new Payment().addPaymentSender(Tenant.CLAUDIO).addPaymentReceiver(Tenant.BOGDAN).addAmount(10));
+        PaymentsManagementCalculator paymentsManagementCalculator = new PaymentsManagementCalculator(payments);
+        assertEquals("Test non equal payments for 3 tenants 2 - computeRemainingPayments",expectedPaymentRemaining, paymentsManagementCalculator.computeRemainingPayments());
+       // assertEquals("Test non equal payments for 3 tenants 2 - computePaymentsList", expectedPayments, paymentsManagementCalculator.computePaymentsList());
     }
 
 }
