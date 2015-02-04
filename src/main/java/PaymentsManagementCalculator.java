@@ -49,20 +49,22 @@ public class PaymentsManagementCalculator {
         }
         for(Map.Entry<Tenant, Integer> paymentToSend : paymentsToSend.entrySet()){
             for(Map.Entry<Tenant, Integer> paymentToReceive : paymentsToReceive.entrySet()){
-                payments.add(new Payment()
-                        .addAmount(paymentToSend.getValue())
-                        .addPaymentSender(paymentToSend.getKey())
-                        .addPaymentReceiver(paymentToReceive.getKey()));
+                Payment payment = new Payment().addPaymentSender(paymentToSend.getKey())
+                                                .addPaymentReceiver(paymentToReceive.getKey());
                 paymentsToSend.remove(paymentToSend.getKey());
                 paymentsToReceive.remove(paymentToReceive.getKey());
 
                 Integer remainingBalance = paymentToSend.getValue() - paymentToReceive.getValue();
-                if(remainingBalance > 0){
-                    paymentsToSend.put(paymentToSend.getKey(), remainingBalance);
+                if(remainingBalance >= 0){
+                    payment.addAmount(paymentToReceive.getValue());
+                    if(remainingBalance != 0)
+                        paymentsToSend.put(paymentToSend.getKey(), remainingBalance);
                 }
                 if(remainingBalance < 0){
+                    payment.addAmount(paymentToSend.getValue());
                     paymentsToReceive.put(paymentToReceive.getKey(), Math.abs(remainingBalance));
                 }
+                payments.add(payment);
             }
         }
         return payments;

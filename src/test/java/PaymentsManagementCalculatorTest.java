@@ -69,7 +69,7 @@ public class PaymentsManagementCalculatorTest {
         expectedPayments.add(new Payment().addPaymentSender(Tenant.CLAUDIO).addPaymentReceiver(Tenant.DAN).addAmount(10));
         expectedPayments.add(new Payment().addPaymentSender(Tenant.CLAUDIO).addPaymentReceiver(Tenant.BOGDAN).addAmount(10));
         PaymentsManagementCalculator paymentsManagementCalculator = new PaymentsManagementCalculator(payments);
-        //assertEquals("Test non equal payments for 3 tenants 2 - computePaymentsList", expectedPayments, paymentsManagementCalculator.computePaymentsList());
+        assertEquals("Test non equal payments for 3 tenants 2 - computePaymentsList", expectedPayments, paymentsManagementCalculator.computePaymentsList());
     }
 
 }
