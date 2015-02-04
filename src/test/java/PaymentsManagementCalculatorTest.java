@@ -53,7 +53,7 @@ public class PaymentsManagementCalculatorTest {
         expectedPayments.add(new Payment().addPaymentSender(Tenant.CLAUDIO).addPaymentReceiver(Tenant.BOGDAN).addAmount(5));
         PaymentsManagementCalculator paymentsManagementCalculator = new PaymentsManagementCalculator(payments);
         assertEquals("computeFor2NonEqualPayment",expectedPaymentRemaining, paymentsManagementCalculator.computeRemainingPayments());
-        //assertEquals("computeFor2NonEqualPayment", expectedPayments, paymentsManagementCalculator.computePaymentsList());
+        assertEquals("computeFor2NonEqualPayment", expectedPayments, paymentsManagementCalculator.computePaymentsList());
 
     }
 

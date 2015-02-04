@@ -25,32 +25,24 @@ public class PaymentsManagementCalculator {
             remainingPayments.put(payment.getKey(), computeContribution() - payment.getValue());
         }
 
-        return sortByValue(remainingPayments);
+        return remainingPayments;
     }
 
     public Set<Payment> computePaymentsList(){
         Set<Payment> payments = new HashSet<Payment>();
+        Tenant paymentReceiver = null;
         Map<Tenant, Integer> remainingPayments = computeRemainingPayments();
-
-
-        return payments;
-    }
-
-    private Map<Tenant,Integer> sortByValue(Map<Tenant,Integer> map){
-        List list = new LinkedList(map.entrySet());
-        Collections.sort(list, new Comparator(){
-            @Override
-            public int compare(Object o1, Object o2){
-                return ( (Comparable) ((Map.Entry)(o2)).getValue()).compareTo( ((Map.Entry)(o1)).getValue() );
+        for(Map.Entry<Tenant, Integer> remainingPayment: remainingPayments.entrySet()){
+            if(remainingPayment.getValue() > 0){
+                payments.add(new Payment().addAmount(remainingPayment.getValue()).addPaymentSender(remainingPayment.getKey()));
             }
-        });
-
-        Map result = new LinkedHashMap();
-        for(Iterator it = list.iterator(); it.hasNext();){
-            Map.Entry entry = (Map.Entry) it.next();
-            result.put(entry.getKey(), entry.getValue());
+            if(remainingPayment.getValue() < 0){
+                paymentReceiver = remainingPayment.getKey();
+            }
         }
-
-        return result;
+        for(Payment payment: payments){
+            payment.addPaymentReceiver(paymentReceiver);
+        }
+        return payments;
     }
 }
