@@ -8,10 +8,14 @@ public class PaymentsManagementCalculator {
     private Map<Tenant, Integer> tennantPaymentsMapping;
     private Integer contributionNeeded;
 
+    private Map<Tenant, Integer> paymentsToSend = new HashMap<Tenant, Integer>();
+    private Map<Tenant, Integer> paymentsToReceive = new HashMap<Tenant, Integer>();
+
     public PaymentsManagementCalculator(Map<Tenant, Integer> tennantPaymentsMapping) {
         this.tennantPaymentsMapping = tennantPaymentsMapping;
         if(tennantPaymentsMapping != null && !tennantPaymentsMapping.isEmpty()){
             contributionNeeded = computeContribution();
+            computeRemainingPayments();
         }else{
             contributionNeeded = new Integer(0);
         }
@@ -25,28 +29,35 @@ public class PaymentsManagementCalculator {
         return (total == 0) ? new Integer(0) : total/tennantPaymentsMapping.size();
     }
 
-    public Map<Tenant, Integer> computeRemainingPayments(){
-        Map<Tenant, Integer> remainingPayments = new HashMap<Tenant, Integer>();
+    private void computeRemainingPayments(){
         for(Map.Entry<Tenant, Integer> payment: tennantPaymentsMapping.entrySet()){
-            remainingPayments.put(payment.getKey(), contributionNeeded - payment.getValue());
+            Integer remainingPayment = contributionNeeded - payment.getValue();
+            if(remainingPayment > 0){
+                paymentsToSend.put(payment.getKey(), remainingPayment);
+            }
+            if(remainingPayment < 0){
+                paymentsToReceive.put(payment.getKey(), Math.abs(remainingPayment));
+            }
         }
-        return remainingPayments;
     }
 
     public Set<Payment> computePaymentsList(){
         Set<Payment> payments = new HashSet<Payment>();
-        Tenant paymentReceiver = null;
-        Map<Tenant, Integer> remainingPayments = computeRemainingPayments();
-        for(Map.Entry<Tenant, Integer> remainingPayment: remainingPayments.entrySet()){
-            if(remainingPayment.getValue() > 0){
-                payments.add(new Payment().addAmount(remainingPayment.getValue()).addPaymentSender(remainingPayment.getKey()));
-            }
-            if(remainingPayment.getValue() < 0){
-                paymentReceiver = remainingPayment.getKey();
-            }
+        if(contributionNeeded == 0 || (paymentsToReceive.isEmpty() && paymentsToSend.isEmpty() )){
+            return payments;
         }
-        for(Payment payment: payments){
-            payment.addPaymentReceiver(paymentReceiver);
+        for(Map.Entry<Tenant, Integer> paymentToSend : paymentsToSend.entrySet()){
+            for(Map.Entry<Tenant, Integer> paymentToReceive : paymentsToReceive.entrySet()){
+                Integer balance = paymentToSend.getValue() - paymentToReceive.getValue();
+                if(balance == 0){
+                    payments.add(new Payment()
+                            .addAmount(paymentToSend.getValue())
+                            .addPaymentSender(paymentToSend.getKey())
+                            .addPaymentReceiver(paymentToReceive.getKey()));
+                    paymentsToSend.remove(paymentToSend.getKey());
+                    paymentsToReceive.remove(paymentToReceive.getKey());
+                }
+            }
         }
         return payments;
     }
