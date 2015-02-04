@@ -1,3 +1,4 @@
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -56,12 +57,12 @@ public class PaymentsManagementCalculator {
 
                 Double remainingBalance = paymentToSend.getValue() - paymentToReceive.getValue();
                 if(remainingBalance >= 0){
-                    payment.addAmount(paymentToReceive.getValue());
+                    payment.addAmount(new BigDecimal(String.valueOf(paymentToReceive.getValue())).setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue());
                     if(remainingBalance != 0)
                         paymentsToSend.put(paymentToSend.getKey(), remainingBalance);
                 }
                 if(remainingBalance < 0){
-                    payment.addAmount(paymentToSend.getValue());
+                    payment.addAmount(new BigDecimal(String.valueOf(paymentToSend.getValue())).setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue());
                     paymentsToReceive.put(paymentToReceive.getKey(), Math.abs(remainingBalance));
                 }
                 payments.add(payment);

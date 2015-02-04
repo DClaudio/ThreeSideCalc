@@ -72,4 +72,14 @@ public class PaymentsManagementCalculatorTest {
         assertEquals("Test non equal payments for 3 tenants 2 - computePaymentsList", expectedPayments, paymentsManagementCalculator.computePaymentsList());
     }
 
+    @Test
+    public void realValuesTest(){
+        Map<Tenant,Double> payments = setupPaymentMapFor3Tenants(203, 93, 150);
+        Set<Payment> expectedPayments = new HashSet<Payment>();
+        expectedPayments.add(new Payment().addPaymentSender(Tenant.CLAUDIO).addPaymentReceiver(Tenant.DAN).addAmount(1.33));
+        expectedPayments.add(new Payment().addPaymentSender(Tenant.CLAUDIO).addPaymentReceiver(Tenant.BOGDAN).addAmount(54.33));
+        PaymentsManagementCalculator paymentsManagementCalculator = new PaymentsManagementCalculator(payments);
+        assertEquals("real values test", expectedPayments, paymentsManagementCalculator.computePaymentsList());
+    }
+
 }
