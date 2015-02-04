@@ -64,10 +64,7 @@ public class Payment {
 
     @Override
     public String toString() {
-        return "domain.Payment{" +
-                "sender=" + sender +
-                ", receiver=" + receiver +
-                ", amount=" + amount +
-                '}';
+        return "{ " + sender.getName() +" has to pay " + receiver.getName() +
+                " " + amount + '}';
     }
 }

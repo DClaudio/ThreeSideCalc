@@ -12,18 +12,18 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class PaymentsManagementCalculator {
 
-    private Map<Tenant, Double> tennantPaymentsMapping;
+    private Map<Tenant, Double> tenantPaymentsMapping;
     private Double contributionNeeded;
 
-    public Map<Tenant, Double> getTennantPaymentsMapping() {return tennantPaymentsMapping; }
+    public Map<Tenant, Double> getTenantPaymentsMapping() {return tenantPaymentsMapping; }
     public Double getContributionNeeded() {return contributionNeeded;}
 
     private Map<Tenant, Double> paymentsToSend = new ConcurrentHashMap<Tenant, Double>();
     private Map<Tenant, Double> paymentsToReceive = new ConcurrentHashMap<Tenant, Double>();
 
-    public PaymentsManagementCalculator(Map<Tenant, Double> tennantPaymentsMapping) {
-        this.tennantPaymentsMapping = tennantPaymentsMapping;
-        if(tennantPaymentsMapping != null && !tennantPaymentsMapping.isEmpty()){
+    public PaymentsManagementCalculator(Map<Tenant, Double> tenantPaymentsMapping) {
+        this.tenantPaymentsMapping = tenantPaymentsMapping;
+        if(tenantPaymentsMapping != null && !tenantPaymentsMapping.isEmpty()){
             contributionNeeded = computeContribution();
             computeRemainingPayments();
         }else{
@@ -33,14 +33,14 @@ public class PaymentsManagementCalculator {
 
     private Double computeContribution(){
         Double total = new Double(0);
-        for(Double payment: tennantPaymentsMapping.values()){
+        for(Double payment: tenantPaymentsMapping.values()){
             total+=payment;
         }
-        return (total == 0) ? new Double(0) : total/tennantPaymentsMapping.size();
+        return (total == 0) ? new Double(0) : total/ tenantPaymentsMapping.size();
     }
 
     private void computeRemainingPayments(){
-        for(Map.Entry<Tenant, Double> payment: tennantPaymentsMapping.entrySet()){
+        for(Map.Entry<Tenant, Double> payment: tenantPaymentsMapping.entrySet()){
             Double remainingPayment = contributionNeeded - payment.getValue();
             if(remainingPayment > 0){
                 paymentsToSend.put(payment.getKey(), remainingPayment);
