@@ -1,4 +1,5 @@
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by claudio.david on 02/02/2015.
@@ -8,8 +9,8 @@ public class PaymentsManagementCalculator {
     private Map<Tenant, Integer> tennantPaymentsMapping;
     private Integer contributionNeeded;
 
-    private Map<Tenant, Integer> paymentsToSend = new HashMap<Tenant, Integer>();
-    private Map<Tenant, Integer> paymentsToReceive = new HashMap<Tenant, Integer>();
+    private Map<Tenant, Integer> paymentsToSend = new ConcurrentHashMap<Tenant, Integer>();
+    private Map<Tenant, Integer> paymentsToReceive = new ConcurrentHashMap<Tenant, Integer>();
 
     public PaymentsManagementCalculator(Map<Tenant, Integer> tennantPaymentsMapping) {
         this.tennantPaymentsMapping = tennantPaymentsMapping;
@@ -48,14 +49,19 @@ public class PaymentsManagementCalculator {
         }
         for(Map.Entry<Tenant, Integer> paymentToSend : paymentsToSend.entrySet()){
             for(Map.Entry<Tenant, Integer> paymentToReceive : paymentsToReceive.entrySet()){
-                Integer balance = paymentToSend.getValue() - paymentToReceive.getValue();
-                if(balance == 0){
-                    payments.add(new Payment()
-                            .addAmount(paymentToSend.getValue())
-                            .addPaymentSender(paymentToSend.getKey())
-                            .addPaymentReceiver(paymentToReceive.getKey()));
-                    paymentsToSend.remove(paymentToSend.getKey());
-                    paymentsToReceive.remove(paymentToReceive.getKey());
+                payments.add(new Payment()
+                        .addAmount(paymentToSend.getValue())
+                        .addPaymentSender(paymentToSend.getKey())
+                        .addPaymentReceiver(paymentToReceive.getKey()));
+                paymentsToSend.remove(paymentToSend.getKey());
+                paymentsToReceive.remove(paymentToReceive.getKey());
+
+                Integer remainingBalance = paymentToSend.getValue() - paymentToReceive.getValue();
+                if(remainingBalance > 0){
+                    paymentsToSend.put(paymentToSend.getKey(), remainingBalance);
+                }
+                if(remainingBalance < 0){
+                    paymentsToReceive.put(paymentToReceive.getKey(), Math.abs(remainingBalance));
                 }
             }
         }
