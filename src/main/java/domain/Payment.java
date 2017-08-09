@@ -1,5 +1,7 @@
 package domain;
 
+import java.math.BigDecimal;
+
 /**
  * Created by claudio.david on 02/02/2015.
  */
@@ -7,7 +9,7 @@ public class Payment {
 
     private Tenant sender;
     private Tenant receiver;
-    private Double amount;
+    private BigDecimal amount;
 
     public Payment() {
         super();
@@ -21,7 +23,7 @@ public class Payment {
         return receiver;
     }
 
-    public Double getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
@@ -35,7 +37,7 @@ public class Payment {
         return this;
     }
 
-    public Payment addAmount(Double amount){
+    public Payment addAmount(BigDecimal amount){
         this.amount = amount;
         return this;
     }

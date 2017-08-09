@@ -7,71 +7,73 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static java.math.BigDecimal.valueOf;
+
 /**
  * Created by claudio.david on 02/02/2015.
  */
 public class PaymentsManagementCalculator {
 
-    private Map<Tenant, Double> tenantPaymentsMapping;
-    private Double contributionNeeded;
+    private Map<Tenant, BigDecimal> tenantPaymentsMapping;
+    private BigDecimal contributionNeeded;
 
-    public Map<Tenant, Double> getTenantPaymentsMapping() {return tenantPaymentsMapping; }
-    public Double getContributionNeeded() {return contributionNeeded;}
+    public Map<Tenant, BigDecimal> getTenantPaymentsMapping() {return tenantPaymentsMapping; }
+    public BigDecimal getContributionNeeded() {return contributionNeeded;}
 
-    private Map<Tenant, Double> paymentsToSend = new ConcurrentHashMap<Tenant, Double>();
-    private Map<Tenant, Double> paymentsToReceive = new ConcurrentHashMap<Tenant, Double>();
+    private Map<Tenant, BigDecimal> paymentsToSend = new ConcurrentHashMap<>();
+    private Map<Tenant, BigDecimal> paymentsToReceive = new ConcurrentHashMap<>();
 
-    public PaymentsManagementCalculator(Map<Tenant, Double> tenantPaymentsMapping) {
+    public PaymentsManagementCalculator(Map<Tenant, BigDecimal> tenantPaymentsMapping) {
         this.tenantPaymentsMapping = tenantPaymentsMapping;
         if(tenantPaymentsMapping != null && !tenantPaymentsMapping.isEmpty()){
             contributionNeeded = computeContribution();
             computeRemainingPayments();
         }else{
-            contributionNeeded = new Double(0);
+            contributionNeeded = new BigDecimal(0);
         }
     }
 
-    private Double computeContribution(){
-        Double total = new Double(0);
-        for(Double payment: tenantPaymentsMapping.values()){
-            total+=payment;
-        }
-        return total.equals(0) ? new Double(0) : total/ tenantPaymentsMapping.size();
+    private BigDecimal computeContribution(){
+        BigDecimal totalPaymentsPerProperty = tenantPaymentsMapping.values().stream()
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        return totalPaymentsPerProperty.equals(BigDecimal.ZERO)
+                ? BigDecimal.ZERO
+                : totalPaymentsPerProperty.divide(valueOf(tenantPaymentsMapping.size()),  2, BigDecimal.ROUND_HALF_DOWN);
     }
 
     private void computeRemainingPayments(){
-        for(Map.Entry<Tenant, Double> payment: tenantPaymentsMapping.entrySet()){
-            Double remainingPayment = contributionNeeded - payment.getValue();
-            if(remainingPayment > 0){
+        for(Map.Entry<Tenant, BigDecimal> payment: tenantPaymentsMapping.entrySet()){
+            BigDecimal remainingPayment = contributionNeeded.subtract(payment.getValue());
+            if(remainingPayment.compareTo(BigDecimal.ZERO) == 1){
                 paymentsToSend.put(payment.getKey(), remainingPayment);
             }
-            if(remainingPayment < 0){
-                paymentsToReceive.put(payment.getKey(), Math.abs(remainingPayment));
+            if(remainingPayment.compareTo(BigDecimal.ZERO)  == -1){
+                paymentsToReceive.put(payment.getKey(), remainingPayment.abs());
             }
         }
     }
 
     public Set<Payment> computePaymentsList(){
-        Set<Payment> payments = new HashSet<Payment>();
-        if(contributionNeeded == 0 || (paymentsToReceive.isEmpty() && paymentsToSend.isEmpty() )){
+        Set<Payment> payments = new HashSet<>();
+        if(contributionNeeded.equals(BigDecimal.ZERO) || (paymentsToReceive.isEmpty() && paymentsToSend.isEmpty() )){
             return payments;
         }
-        for(Map.Entry<Tenant, Double> paymentToSend : paymentsToSend.entrySet()){
-            for(Map.Entry<Tenant, Double> paymentToReceive : paymentsToReceive.entrySet()){
+        for(Map.Entry<Tenant, BigDecimal> paymentToSend : paymentsToSend.entrySet()){
+            for(Map.Entry<Tenant, BigDecimal> paymentToReceive : paymentsToReceive.entrySet()){
                 Payment payment = new Payment().addPaymentSender(paymentToSend.getKey())
                                                 .addPaymentReceiver(paymentToReceive.getKey());
                 paymentsToSend.remove(paymentToSend.getKey());
                 paymentsToReceive.remove(paymentToReceive.getKey());
 
-                Double remainingBalance = paymentToSend.getValue() - paymentToReceive.getValue();
-                if(remainingBalance >= 0){
-                    payment.addAmount(new BigDecimal(String.valueOf(paymentToReceive.getValue())).setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue());
-                    if(remainingBalance != 0)
+                BigDecimal remainingBalance = paymentToSend.getValue().subtract(paymentToReceive.getValue());
+                if(remainingBalance.compareTo(BigDecimal.ZERO) >= 0){
+                    payment.addAmount(paymentToReceive.getValue().setScale(2, BigDecimal.ROUND_HALF_DOWN));
+                    if(!remainingBalance.equals(BigDecimal.ZERO))
                         paymentsToSend.put(paymentToSend.getKey(), remainingBalance);
                 }
-                if(remainingBalance < 0){
-                    payment.addAmount(new BigDecimal(String.valueOf(paymentToSend.getValue())).setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue());
-                    paymentsToReceive.put(paymentToReceive.getKey(), Math.abs(remainingBalance));
+                if(remainingBalance.compareTo(BigDecimal.ZERO) == -1){
+                    payment.addAmount(paymentToSend.getValue().setScale(2, BigDecimal.ROUND_HALF_DOWN));
+                    paymentsToReceive.put(paymentToReceive.getKey(), remainingBalance.abs());
                 }
                 payments.add(payment);
             }
