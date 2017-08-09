@@ -36,9 +36,12 @@ public class PaymentsManagementCalculator {
     private BigDecimal computeContribution(){
         BigDecimal totalPaymentsPerProperty = tenantPaymentsMapping.values().stream()
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-        return totalPaymentsPerProperty.equals(BigDecimal.ZERO)
+        BigDecimal paymentPerTennant = totalPaymentsPerProperty.equals(BigDecimal.ZERO)
                 ? BigDecimal.ZERO
-                : totalPaymentsPerProperty.divide(valueOf(tenantPaymentsMapping.size()),  2, BigDecimal.ROUND_HALF_DOWN);
+                : totalPaymentsPerProperty.divide(valueOf(tenantPaymentsMapping.size()), 2, BigDecimal.ROUND_HALF_DOWN);
+        System.out.println("Total Pay: " + totalPaymentsPerProperty);
+        System.out.println("Total per tenant: " + paymentPerTennant);
+        return paymentPerTennant;
     }
 
     private void computeRemainingPayments(){
