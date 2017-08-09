@@ -10,6 +10,7 @@ import org.junit.Test;
 import java.math.BigDecimal;
 import java.util.*;
 
+import static domain.Payment.newPayment;
 import static java.math.BigDecimal.valueOf;
 import static org.junit.Assert.assertEquals;
 
@@ -42,8 +43,8 @@ public class PaymentsManagementCalculatorTest {
     public void computeFor2NonEqualPaymentTest(){
         Map<Tenant,BigDecimal> payments = setupPaymentMapFor2Tenants(valueOf(30).setScale(2), valueOf(20).setScale(2));
         Set<Payment> expectedPayments = new HashSet<>();
-        expectedPayments.add(new Payment()
-                .addPaymentSender(Tenant.CLAUDIO).addPaymentReceiver(Tenant.BOGDAN).addAmount(valueOf(5).setScale(2)));
+        expectedPayments.add(newPayment()
+                .withSender(Tenant.CLAUDIO).withReceiver(Tenant.BOGDAN).withAmount(valueOf(5).setScale(2)));
         PaymentsManagementCalculator paymentsManagementCalculator = new PaymentsManagementCalculator(payments);
         assertEquals("Test non equal payments for two tenants - computePaymentsList", expectedPayments, paymentsManagementCalculator.computePaymentsList());
     }
@@ -52,7 +53,7 @@ public class PaymentsManagementCalculatorTest {
     public void computeForNonEqualPaymentsTest(){
         Map<Tenant,BigDecimal> payments = setupPaymentMapFor3Tenants(valueOf(30).setScale(2).setScale(2), valueOf(20).setScale(2).setScale(2), valueOf(40).setScale(2).setScale(2).setScale(2));
         Set<Payment> expectedPayments = new HashSet<>();
-        expectedPayments.add(new Payment().addPaymentSender(Tenant.CLAUDIO).addPaymentReceiver(Tenant.DAN).addAmount(valueOf(10).setScale(2)));
+        expectedPayments.add(newPayment().withSender(Tenant.CLAUDIO).withReceiver(Tenant.DAN).withAmount(valueOf(10).setScale(2)));
         PaymentsManagementCalculator paymentsManagementCalculator = new PaymentsManagementCalculator(payments);
         assertEquals("Test non equal payments for 3 tenants - computePaymentsList", expectedPayments, paymentsManagementCalculator.computePaymentsList());
     }
@@ -62,8 +63,8 @@ public class PaymentsManagementCalculatorTest {
          public void computeFor3NonEqualPaymentTest(){
         Map<Tenant,BigDecimal> payments = setupPaymentMapFor3Tenants(valueOf(20).setScale(2), valueOf(20).setScale(2), valueOf(50).setScale(2));
         Set<Payment> expectedPayments = new HashSet<>();
-        expectedPayments.add(new Payment().addPaymentSender(Tenant.CLAUDIO).addPaymentReceiver(Tenant.DAN).addAmount(valueOf(10).setScale(2)));
-        expectedPayments.add(new Payment().addPaymentSender(Tenant.BOGDAN).addPaymentReceiver(Tenant.DAN).addAmount(valueOf(10).setScale(2)));
+        expectedPayments.add(newPayment().withSender(Tenant.CLAUDIO).withReceiver(Tenant.DAN).withAmount(valueOf(10).setScale(2)));
+        expectedPayments.add(newPayment().withSender(Tenant.BOGDAN).withReceiver(Tenant.DAN).withAmount(valueOf(10).setScale(2)));
         PaymentsManagementCalculator paymentsManagementCalculator = new PaymentsManagementCalculator(payments);
         assertEquals("Test non equal payments for 3 tenants - computePaymentsList", expectedPayments, paymentsManagementCalculator.computePaymentsList());
     }
@@ -72,8 +73,8 @@ public class PaymentsManagementCalculatorTest {
     public void computeFor3NonEqualPaymentTest2(){
         Map<Tenant,BigDecimal> payments = setupPaymentMapFor3Tenants(valueOf(40).setScale(2).setScale(2), valueOf(10).setScale(2), valueOf(40).setScale(2).setScale(2));
         Set<Payment> expectedPayments = new HashSet<>();
-        expectedPayments.add(new Payment().addPaymentSender(Tenant.CLAUDIO).addPaymentReceiver(Tenant.DAN).addAmount(valueOf(10).setScale(2)));
-        expectedPayments.add(new Payment().addPaymentSender(Tenant.CLAUDIO).addPaymentReceiver(Tenant.BOGDAN).addAmount(valueOf(10).setScale(2)));
+        expectedPayments.add(newPayment().withSender(Tenant.CLAUDIO).withReceiver(Tenant.DAN).withAmount(valueOf(10).setScale(2)));
+        expectedPayments.add(newPayment().withSender(Tenant.CLAUDIO).withReceiver(Tenant.BOGDAN).withAmount(valueOf(10).setScale(2)));
         PaymentsManagementCalculator paymentsManagementCalculator = new PaymentsManagementCalculator(payments);
         assertEquals("Test non equal payments for 3 tenants 2 - computePaymentsList", expectedPayments, paymentsManagementCalculator.computePaymentsList());
     }
@@ -82,8 +83,8 @@ public class PaymentsManagementCalculatorTest {
     public void realValuesTest(){
         Map<Tenant,BigDecimal> payments = setupPaymentMapFor3Tenants(valueOf(203), valueOf(93), valueOf(150));
         Set<Payment> expectedPayments = new HashSet<>();
-        expectedPayments.add(new Payment().addPaymentSender(Tenant.CLAUDIO).addPaymentReceiver(Tenant.DAN).addAmount(valueOf(1.33)));
-        expectedPayments.add(new Payment().addPaymentSender(Tenant.CLAUDIO).addPaymentReceiver(Tenant.BOGDAN).addAmount(valueOf(54.33)));
+        expectedPayments.add(newPayment().withSender(Tenant.CLAUDIO).withReceiver(Tenant.DAN).withAmount(valueOf(1.33)));
+        expectedPayments.add(newPayment().withSender(Tenant.CLAUDIO).withReceiver(Tenant.BOGDAN).withAmount(valueOf(54.33)));
         PaymentsManagementCalculator paymentsManagementCalculator = new PaymentsManagementCalculator(payments);
         assertEquals("real values test", expectedPayments, paymentsManagementCalculator.computePaymentsList());
     }

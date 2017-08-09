@@ -15,31 +15,29 @@ public class Payment {
         super();
     }
 
-    public Tenant getSender() {
-        return sender;
+    public static Payment newPayment(){
+        return new Payment();
     }
 
-    public Tenant getReceiver() {
-        return receiver;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public Payment addPaymentSender(Tenant sender){
+    private Payment(Tenant sender, Tenant receiver, BigDecimal amount) {
         this.sender = sender;
-        return this;
-    }
-
-    public Payment addPaymentReceiver(Tenant receiver){
         this.receiver = receiver;
-        return this;
+        this.amount = amount;
     }
 
-    public Payment addAmount(BigDecimal amount){
+    public Payment withSender(Tenant sender) {
+        this.sender = sender;
+        return new Payment(sender, this.receiver, this.amount);
+    }
+
+    public Payment withReceiver(Tenant receiver) {
+        this.receiver = receiver;
+        return new Payment(this.sender, receiver, this.amount);
+    }
+
+    public Payment withAmount(BigDecimal amount) {
         this.amount = amount;
-        return this;
+        return new Payment(this.sender, this.receiver, amount);
     }
 
     @Override
@@ -66,7 +64,7 @@ public class Payment {
 
     @Override
     public String toString() {
-        return "{ " + sender.getName() +" has to pay " + receiver.getName() +
+        return "{ " + sender.getName() + " has to pay " + receiver.getName() +
                 " " + amount + '}';
     }
 }
